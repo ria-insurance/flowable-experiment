@@ -4,6 +4,7 @@ pipeline {
     stage('Print') {
       steps {
         echo 'Hi'
+        sleep 10
       }
     }
 
