@@ -2,17 +2,20 @@ pipeline {
   agent any
   stages {
     stage('Example') {
-            input {
-                message "Let's promote?"
-                ok 'Release!'
-                parameters {
-                    choice defaultValue: 'blue,green,yellow,blue', description: '', descriptionPropertyValue: 'blue,green,yellow,blue', multiSelectDelimiter: ',', name: 'favColor', quoteValue: false, saveJSONParameterToFile: false, type: 'PT_MULTI_SELECT', value: 'blue,green,yellow,blue', visibleItemCount: 5
+      steps {
+                timeout(time: 30, unit: 'SECONDS') {
+                    script {
+                        // Show the select input modal
+                       def INPUT_PARAMS = input message: 'Please Provide Parameters', ok: 'Next',
+                                        parameters: [
+                                        choice(name: 'ENVIRONMENT', choices: ['dev','qa'].join('\n'), description: 'Please select the Environment'),
+                                        choice(name: 'IMAGE_TAG', choices: getDockerImages(), description: 'Available Docker Images')]
+                        env.ENVIRONMENT = INPUT_PARAMS.ENVIRONMENT
+                        env.IMAGE_TAG = INPUT_PARAMS.IMAGE_TAG
+                    }
                 }
             }
-            steps {
-                echo "Your favorite color is ${favColor}"
-            }
-        }
+    }
 
   }
 }
