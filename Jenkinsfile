@@ -3,7 +3,11 @@ pipeline {
   stages {
     stage('') {
       steps {
-        input(message: 'Envs', id: 'envs', ok: 'S1,S2')
+        input(
+ id: 'userInput', message: 'Let\'s promote?', parameters: [
+ [$class: 'TextParameterDefinition', defaultValue: 'uat', description: 'Environment', name: 'env'],
+ [$class: 'BooleanParameterDefinition', defaultValue: true, description: 'Target', name: 'target']
+]) 
       }
     }
 
